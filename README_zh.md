@@ -6,7 +6,7 @@
 
 ## 使用
 
-在`Cargo.toml`添加 `[package.metadata.scripts]` 
+在`Cargo.toml`添加 `[package.metadata.scripts]`，注意文件名区分大小写，不能是`cargo.toml`或`CARGO.toml`。
 
 例如：
 
