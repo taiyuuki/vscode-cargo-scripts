@@ -1,6 +1,13 @@
-# vscode-cargo-scripts
+<p align="center">
+<img src="https://taiyuuki.gallerycdn.vsassets.io/extensions/taiyuuki/vscode-cargo-scripts/0.0.1/1680743890799/Microsoft.VisualStudio.Services.Icons.Default"  />
+</p>
 
-`vscode-cargo-scripts` 是一个VS Code插件，让你可以在 `Cargo.toml`中配置命令行脚本，然后就能在编辑器的侧边栏显示并点击运行。
+
+<h1 align="center">Cargo Scripts</h1>
+
+<p align="center"><a href="https://marketplace.visualstudio.com/items?itemName=taiyuuki.vscode-cargo-scripts">
+    <img alt="Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/taiyuuki.vscode-cargo-scripts?color=%23813c85&label=Marketplace&logo=visual%20studio%20code"></a></p>
+`Cargo Scripts` 是一个VS Code插件，让你可以在 `Cargo.toml`中配置命令行脚本，然后就能在编辑器的侧边栏显示并点击运行。
 
 就像NPM的`package.json`中的`scripts`字段一样。
 
