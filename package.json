@@ -1,0 +1,90 @@
+{
+  "name": "vscode-cargo-scripts",
+  "displayName": "Cargo Scripts",
+  "publisher": "taiyuuki",
+  "version": "0.0.1",
+  "description": "Run scripts from Cargo.toml",
+  "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taiyuuki/vscode-cargo-scripts"
+  },
+  "bugs": "https://github.com/taiyuuki/vscode-cargo-scripts/issues",
+  "homepage": "https://github.com/taiyuuki/vscode-cargo-scripts#readme",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "icon": "res/cargo_scripts.png",
+  "activationEvents": [
+    "workspaceContains:**/Cargo.toml"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "cargoScripts.run",
+        "title": "cargo run",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "cargoScripts.refresh",
+        "title": "refresh",
+        "icon": "$(search-refresh)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "cargoScripts",
+          "name": "Cargo scripts",
+          "when": "showCargoScript"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "cargoScripts.refresh",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": [
+      {
+        "title": "cargo-scripts",
+        "properties": {
+          "cargoScripts.terminal": {
+            "type": "boolean",
+            "default": false,
+            "description": "Create a separate terminal for each script."
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint --ext .js,.ts ./",
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "bump:patch": "bump patch",
+    "package": "npx vsce package --no-dependencies",
+    "publish": "npx vsce publish",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "taiyuuki <taiyuuki@qq.com>",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@taiyuuki/eslint-config-ts": "^0.0.5",
+    "@types/node": "^18.11.18",
+    "@types/vscode": "^1.74.0",
+    "@vscode/test-electron": "^2.2.2",
+    "eslint": "^8.10.0",
+    "tsup": "^6.4.0"
+  }
+}
