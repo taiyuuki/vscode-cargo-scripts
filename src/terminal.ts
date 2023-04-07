@@ -15,7 +15,8 @@ export function executeCommand(cmd: string, label: string, cwd: string) {
     const terminalOptions: vscode.TerminalOptions = {
       name: terminalName,
       cwd,
-      hideFromUser: false,
+      hideFromUser: true,
+      iconPath: new vscode.ThemeIcon('tools'),
     }
 
     terminal = vscode.window.createTerminal(terminalOptions)

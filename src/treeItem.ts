@@ -6,10 +6,12 @@ const CARGO_LOGO = join(__dirname, '../res/cargo_logo.svg')
 
 export class WorkspaceTreeItem extends vscode.TreeItem {
   constructor(
-    label: string,
+    public label: string,
+    public scripts: Record<string, string>,
     state = vscode.TreeItemCollapsibleState.Expanded
   ) {
     super(label, state)
+    this.scripts = scripts
   }
 
   iconPath = CARGO_LOGO

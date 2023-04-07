@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Run scripts from Cargo.toml",
   "main": "./dist/index.js",
   "repository": {
@@ -90,5 +90,8 @@
     "@vscode/test-electron": "^2.2.2",
     "eslint": "^8.10.0",
     "tsup": "^6.4.0"
+  },
+  "dependencies": {
+    "fast-glob": "^3.2.12"
   }
 }

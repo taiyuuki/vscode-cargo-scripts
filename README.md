@@ -2,7 +2,6 @@
 <img src="https://taiyuuki.gallerycdn.vsassets.io/extensions/taiyuuki/vscode-cargo-scripts/0.0.1/1680743890799/Microsoft.VisualStudio.Services.Icons.Default"  />
 </p>
 
-
 <h1 align="center">Cargo Scripts</h1>
 
 <p align="center"><a href="https://marketplace.visualstudio.com/items?itemName=taiyuuki.vscode-cargo-scripts">
@@ -29,20 +28,6 @@ release = "cargo build --release"
 <p align="center">
 <img src="https://s2.loli.net/2023/04/06/HwEItz9TR1Gcb7k.jpg" />
 </p>
-
-## Settings
-
-By default, the first time a script is run, a terminal will be created, and each subsequent script will run on the same terminal.
-
-If you want to create a separate terminal for each script, you can set this option to true.
-
-`settings.json`
-
-```json
-{
-    "cargoScripts.terminal": true
-}
-```
 
 ## License
 

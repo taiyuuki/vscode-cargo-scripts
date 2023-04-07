@@ -1,28 +1,39 @@
 import * as vscode from 'vscode'
 import * as fs from 'fs'
 import { ScriptTreeItem, WorkspaceTreeItem } from './treeItem'
-import { getTomlPath } from './utils'
+import { replaceRootPath } from './utils'
 import tomlParser from 'toml'
+import fg from 'fast-glob'
+import { join } from 'path'
 
 export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem | WorkspaceTreeItem> {
   private readonly _onChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined>()
   public readonly onDidChangeTreeData = this._onChangeTreeData.event
+  private folders: string[]
+  valid: boolean[]
 
   constructor(private readonly workspaceRoot: string) {
-    this.folders?.forEach(folder => {
-      const pattern: string = getTomlPath(folder.uri.fsPath)
-      if (this.pathExists(pattern)) {
-        const watcher = vscode.workspace.createFileSystemWatcher(pattern)
-        watcher.onDidChange(() => {
-          this._onChangeTreeData.fire(void 0)
-          vscode.commands.executeCommand('setContext', 'showCargoScript', true)
-        })
-      }
-    })
+    this.valid = []
+    this.folders = this._getFolders()
+    const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '**/Cargo.toml'))
+    watcher.onDidChange(this.emitDataChange.bind(this))
+    vscode.commands.executeCommand('setContext', 'showCargoScript', true)
   }
 
-  get folders() {
-    return vscode.workspace.workspaceFolders
+  _getFolders() {
+    return fg.sync(['**/Cargo.toml'], {
+      cwd: this.workspaceRoot,
+      ignore: ['target', 'node_modules', 'dist', 'src'],
+      caseSensitiveMatch: false,
+    }).map(folder => join(this.workspaceRoot, folder))
+  }
+
+  emitDataChange() {
+    this.folders = this._getFolders()
+    if (!this.valid.includes(false)) {
+      this._showScriptTree(true)
+    }
+    this._onChangeTreeData.fire(void 0)
   }
 
   getTreeItem(element: ScriptTreeItem | WorkspaceTreeItem): vscode.TreeItem {
@@ -34,67 +45,57 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
       return Promise.resolve([])
     }
     if (element) {
-      const folder = this.folders?.find(o => o.name === element.label)
-      const path = folder?.uri.fsPath
-      if (path) {
-        return Promise.resolve(this.getScriptsTreeItem(path))
+      const path = this.folders.find(folder => replaceRootPath(folder, this.workspaceRoot)  === element.label)
+      if (path && 'scripts' in element) {
+        return Promise.resolve(this._getScriptsTreeItem(path, element.scripts))
       }
       else {
         return Promise.resolve([])
       }
     }
+    else if (this.folders.length > 0) {
+      return Promise.resolve(this._getWorkspaceTree())
+    }
     else {
-      const cargoTomlPath = getTomlPath(this.workspaceRoot)
-      if (this.pathExists(cargoTomlPath)) {
-        if (this.folders?.length) {
-          return Promise.resolve(this.getWorkspaceTree())
-        }
-        else {
-          return Promise.resolve([])
-        }
-      }
-      else {
-        return Promise.resolve([])
-      }
+      return Promise.resolve([])
     }
   }
 
-  private getWorkspaceTree() {
+  private _getWorkspaceTree() {
     const workspaceTreeItems: WorkspaceTreeItem[] = []
-    this.folders?.forEach(folder => {
-      const folderName = folder.name
-      if (folderName === 'target') {
-        return
-      }
-      const root = folder.uri.fsPath
-      const tomlPath = getTomlPath(root)
-      if (this.pathExists(tomlPath)) {
-        workspaceTreeItems.push(new WorkspaceTreeItem(folderName))
+    this.valid = []
+    this.folders.forEach(folder => {
+      if (this._pathExists(folder)) {
+        const text = fs.readFileSync(folder, 'utf-8')
+        const toml = tomlParser.parse(text)
+        const scripts = toml?.package?.metadata?.scripts
+        if (scripts) {
+          workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), scripts))
+          this.valid.push(false)
+        }
+        else {
+          this.valid.push(true)
+        }
       }
     })
+
+    if (!this.valid.includes(false)) {
+      this._showScriptTree(false)
+    }
     return workspaceTreeItems
   }
 
-  private getScriptsTreeItem(path: string) {
-    const tomlPath = getTomlPath(path ?? this.workspaceRoot)
+  private _getScriptsTreeItem(folder: string, scripts: Record<string, string>) {
     const scriptTreeItems: ScriptTreeItem[] = []
-    if (this.pathExists(tomlPath)) {
-      const text = fs.readFileSync(tomlPath, 'utf-8')
-      const toml = tomlParser.parse(text)
-      const scripts = toml?.package?.metadata?.scripts
-      if (scripts) {
-        Object.keys(scripts).forEach(key => {
-          scriptTreeItems.push(new ScriptTreeItem(key, scripts[key], tomlPath))
-        })
-      }
-      else {
-        vscode.commands.executeCommand('setContext', 'showCargoScript', false)
-      }
+    if (this._pathExists(folder)) {
+      Object.keys(scripts).forEach(key => {
+        scriptTreeItems.push(new ScriptTreeItem(key, scripts[key], folder))
+      })
     }
     return scriptTreeItems
   }
 
-  private pathExists(p: string): boolean {
+  private _pathExists(p: string): boolean {
     try {
       fs.accessSync(p)
     }
@@ -102,5 +103,9 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
       return false
     }
     return true
+  }
+
+  _showScriptTree(show: boolean) {
+    vscode.commands.executeCommand('setContext', 'showCargoScript', show)
   }
 }
