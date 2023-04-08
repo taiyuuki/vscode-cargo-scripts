@@ -29,7 +29,7 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
   }
 
   emitDataChange() {
-    this.folders = this._getFolders()
+    // this.folders = this._getFolders()
     if (!this.valid.includes(false)) {
       this._showScriptTree(true)
     }

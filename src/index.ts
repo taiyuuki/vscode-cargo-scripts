@@ -13,10 +13,30 @@ export function activate(context: vscode.ExtensionContext) {
     executeCommand(cmd, lable, cwd)
   })
   const refreshDispose = vscode.commands.registerCommand('cargoScripts.refresh', scriptsTree.emitDataChange.bind(scriptsTree))
+  const completionDispose = vscode.languages.registerCompletionItemProvider([{ language: 'toml', pattern: '**/Cargo.toml' }], {
+    provideCompletionItems(document, position) {
+      const linePrefix = document.lineAt(position).text.substring(0, position.character)
+      if (linePrefix.startsWith('[package.metadata.')) {
+        return [
+          new vscode.CompletionItem('scripts', vscode.CompletionItemKind.Text),
+        ]
+      }
+      else if (linePrefix.startsWith('[package.')) {
+        return [
+          new vscode.CompletionItem('metadata', vscode.CompletionItemKind.Text),
+          new vscode.CompletionItem('metadata.scripts', vscode.CompletionItemKind.Text),
+        ]
+      }
+      else {
+        return void 0
+      }
+    },
+  }, '.')
 
   context.subscriptions.push(treeData)
   context.subscriptions.push(runDispose)
   context.subscriptions.push(refreshDispose)
+  context.subscriptions.push(completionDispose)
 }
 
 export function deactivate(context: vscode.ExtensionContext) {

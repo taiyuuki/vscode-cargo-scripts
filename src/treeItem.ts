@@ -1,7 +1,6 @@
 import { join } from 'path'
 import * as vscode from 'vscode'
 
-// const FOLDER_ICON = vscode.ThemeIcon.Folder
 const CARGO_LOGO = join(__dirname, '../res/cargo_logo.svg')
 
 export class WorkspaceTreeItem extends vscode.TreeItem {
