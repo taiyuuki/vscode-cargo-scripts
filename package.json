@@ -92,6 +92,7 @@
     "tsup": "^6.4.0"
   },
   "dependencies": {
-    "fast-glob": "^3.2.12"
+    "fast-glob": "^3.2.12",
+    "toml": "^3.0.0"
   }
 }

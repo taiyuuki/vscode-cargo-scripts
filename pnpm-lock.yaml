@@ -7,10 +7,12 @@ specifiers:
   '@vscode/test-electron': ^2.2.2
   eslint: ^8.10.0
   fast-glob: ^3.2.12
+  toml: ^3.0.0
   tsup: ^6.4.0
 
 dependencies:
   fast-glob: 3.2.12
+  toml: 3.0.0
 
 devDependencies:
   '@taiyuuki/eslint-config-ts': 0.0.5_eslint@8.32.0
@@ -2141,6 +2143,10 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
+
+  /toml/3.0.0:
+    resolution: {integrity: sha512-y/mWCZinnvxjTKYhJ+pYxwD0mRLVvOtdS2Awbgxln6iEnt4rk0yBxeSBHkGJcPucRiG0e55mwWp+g/05rsrd6w==}
+    dev: false
 
   /tr46/1.0.1:
     resolution: {integrity: sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=}

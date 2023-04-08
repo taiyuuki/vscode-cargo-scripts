@@ -9,6 +9,6 @@ export default defineConfig({
   external: [
     'vscode',
   ],
-  noExternal: ['fast-glob'],
+  noExternal: ['fast-glob', 'toml'],
   format: ['cjs'],
 })
