@@ -30,5 +30,5 @@ export class ScriptTreeItem extends vscode.TreeItem {
     this.description = cmd
   }
 
-  iconPath = new vscode.ThemeIcon('symbol-property')
+  iconPath = new vscode.ThemeIcon('wrench')
 }

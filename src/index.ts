@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
   const scriptsTree = new CargoScriptsTree(workspaceFolders)
   const treeData = vscode.window.registerTreeDataProvider('cargoScripts', scriptsTree)
   const runDispose = vscode.commands.registerCommand('cargoScripts.run', (lable: string, cmd: string, cwd: string) => {
-    executeCommand(cmd, lable, cwd)
+    executeCommand(lable, cmd, cwd)
   })
   const refreshDispose = vscode.commands.registerCommand('cargoScripts.refresh', scriptsTree.emitDataChange.bind(scriptsTree))
   const completionDispose = vscode.languages.registerCompletionItemProvider([{ language: 'toml', pattern: '**/Cargo.toml' }], {

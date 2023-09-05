@@ -1,7 +1,7 @@
 import path from 'path'
 import * as vscode from 'vscode'
 
-export function executeCommand(cmd: string, label: string, cwd: string) {
+export function executeCommand(label: string, cmd: string,  cwd: string) {
   let terminal: vscode.Terminal
   const separate = vscode.workspace.getConfiguration().get('cargoScripts.terminal')
   const terminalName = separate ? `${path.basename(cwd)}: ${label}` : path.basename(cwd)
