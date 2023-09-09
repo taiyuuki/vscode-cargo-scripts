@@ -15,7 +15,7 @@ Just like the scripts in NPM's `package.json`.
 
 Adding a `[package.metadata.scripts]` section to the `Cargo.toml`.
 
-The file name should be case sensitive, cannot be `cargo.toml` or `CARGO.toml`.
+For example
 
 ```toml
 [package.metadata.scripts]
@@ -24,6 +24,8 @@ check = "cargo check"
 build = "cargo build"
 release = "cargo build --release"
 ```
+
+Then you will find the **Cargo Scripts** on the sidebar, Notice how all scripts have a **Run** icon next to them, you can run script by clicking on the icon.
 
 <p align="center">
 <img src="https://s2.loli.net/2023/04/06/HwEItz9TR1Gcb7k.jpg" />

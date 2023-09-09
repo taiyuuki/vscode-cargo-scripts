@@ -13,7 +13,7 @@
 
 ## 使用
 
-在 `Cargo.toml` 添加 `[package.metadata.scripts]`，注意文件名区分大小写，不能是 `cargo.toml` 或 `CARGO.toml` 。
+在 `Cargo.toml` 添加 `[package.metadata.scripts]`。
 
 例如：
 
@@ -24,6 +24,8 @@ check = "cargo check"
 build = "cargo build"
 release = "cargo build --release"
 ```
+
+然后你就能在侧边栏中找到 **Cargo Scripts** 面板了，注意每个脚本后面都有一个 **运行** 图标，点击该图标即可运行脚本。
 
 <p align="center">
 <img src="https://s2.loli.net/2023/04/06/HwEItz9TR1Gcb7k.jpg" />

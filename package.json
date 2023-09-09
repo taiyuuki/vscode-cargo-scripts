@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Run scripts from Cargo.toml",
   "main": "./dist/index.js",
   "repository": {
@@ -25,12 +25,16 @@
     "commands": [
       {
         "command": "cargoScripts.run",
-        "title": "cargo run",
+        "title": "Run",
         "icon": "$(debug-start)"
       },
       {
+        "command": "cargoScripts.open",
+        "title": "Open"
+      },
+      {
         "command": "cargoScripts.refresh",
-        "title": "refresh",
+        "title": "Refresh",
         "icon": "$(search-refresh)"
       }
     ],
@@ -38,7 +42,7 @@
       "explorer": [
         {
           "id": "cargoScripts",
-          "name": "Cargo scripts",
+          "name": "Cargo Scripts",
           "when": "showCargoScript"
         }
       ]
@@ -48,6 +52,14 @@
         {
           "command": "cargoScripts.refresh",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cargoScripts.run",
+          "group": "inline",
+          "when": "viewItem == script_item",
+          "icon": "$(run)"
         }
       ]
     },

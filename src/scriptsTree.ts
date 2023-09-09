@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as fs from 'fs'
 import { ScriptTreeItem, WorkspaceTreeItem } from './treeItem'
-import { replaceRootPath } from './utils'
+import { pathExists, replaceRootPath } from './utils'
 import tomlParser from 'toml'
 import fg from 'fast-glob'
 import { join } from 'path'
@@ -28,8 +28,11 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
     }).map(folder => join(this.workspaceRoot, folder))
   }
 
-  emitDataChange() {
-    // this.folders = this._getFolders()
+  emitDataChange(e?: vscode.Uri) {
+    console.log(e)
+    if (e?.fsPath && !this.folders.includes(e.fsPath)) {
+      this.folders = this._getFolders()
+    }
     if (!this.valid.includes(false)) {
       this._showScriptTree(true)
     }
@@ -65,7 +68,7 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
     const workspaceTreeItems: WorkspaceTreeItem[] = []
     this.valid = []
     this.folders.forEach(folder => {
-      if (this._pathExists(folder)) {
+      if (pathExists(folder)) {
         const text = fs.readFileSync(folder, 'utf-8')
         const toml = tomlParser.parse(text)
         const scripts = toml?.package?.metadata?.scripts
@@ -87,22 +90,12 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
 
   private _getScriptsTreeItem(folder: string, scripts: Record<string, string>) {
     const scriptTreeItems: ScriptTreeItem[] = []
-    if (this._pathExists(folder)) {
+    if (pathExists(folder)) {
       Object.keys(scripts).forEach(key => {
         scriptTreeItems.push(new ScriptTreeItem(key, scripts[key], folder))
       })
     }
     return scriptTreeItems
-  }
-
-  private _pathExists(p: string): boolean {
-    try {
-      fs.accessSync(p)
-    }
-    catch (err) {
-      return false
-    }
-    return true
   }
 
   _showScriptTree(show: boolean) {

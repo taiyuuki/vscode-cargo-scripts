@@ -18,16 +18,22 @@ export class WorkspaceTreeItem extends vscode.TreeItem {
 
 export class ScriptTreeItem extends vscode.TreeItem {
   name: string
+  cmd: string
+  cwd: string
   constructor(label: string, cmd: string, cwd: string) {
     super(label, vscode.TreeItemCollapsibleState.None)
     this.name = label
     this.command = {
-      title: 'Run script',
-      command: 'cargoScripts.run',
-      arguments: [label, cmd, cwd.substring(0, cwd.lastIndexOf('\\'))],
+      title: 'Open',
+      command: 'cargoScripts.open',
+      arguments: [label, cmd, cwd],
     }
+    cwd = cwd.substring(0, cwd.lastIndexOf('\\'))
+    this.cmd = cmd
+    this.cwd = cwd
     this.tooltip = cmd
     this.description = cmd
+    this.contextValue = 'script_item'
   }
 
   iconPath = new vscode.ThemeIcon('wrench')
