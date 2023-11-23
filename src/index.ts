@@ -21,12 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
   const openDispose = vscode.commands.registerCommand('cargoScripts.open', (label, cmd, cwd) => {
     if (pathExists(cwd)) {
       vscode.workspace.openTextDocument(vscode.Uri.file(cwd)).then((doc) => {
-        const pst = doc.getText().indexOf(cmd)
-        if (pst < 0) {
-          vscode.window.showTextDocument(doc)
+        const reg = new RegExp(`${label}\\s*=\\s*[\\"\\']${cmd}[\\"\\']`, 'i')
+        const match = reg.exec(doc.getText())
+        if (match) {
+          const pst = match.index
+          vscode.window.showTextDocument(doc, { selection: new vscode.Range(doc.positionAt(pst), doc.positionAt(pst + match[0].length)) })
         }
         else {
-          vscode.window.showTextDocument(doc, { selection: new vscode.Range(doc.positionAt(pst), doc.positionAt(pst + cmd.length)) })
+          vscode.window.showTextDocument(doc)
         }
       })
     }

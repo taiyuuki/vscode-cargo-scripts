@@ -13,7 +13,7 @@ Just like the scripts in NPM's `package.json`.
 
 ## Usage
 
-Adding a `[package.metadata.scripts]` section to the `Cargo.toml`.
+Adding a `[package.metadata.scripts]` or `[workspace.metadata.scripts]` (If you are in a workspace) section to the `Cargo.toml`.
 
 For example
 

@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Run scripts from Cargo.toml",
   "main": "./dist/index.js",
   "repository": {

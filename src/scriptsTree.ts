@@ -29,7 +29,6 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
   }
 
   emitDataChange(e?: vscode.Uri) {
-    console.log(e)
     if (e?.fsPath && !this.folders.includes(e.fsPath)) {
       this.folders = this._getFolders()
     }
@@ -72,8 +71,13 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
         const text = fs.readFileSync(folder, 'utf-8')
         const toml = tomlParser.parse(text)
         const scripts = toml?.package?.metadata?.scripts
+        const workspqceScripts = toml?.workspace?.metadata?.scripts
         if (scripts) {
           workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), scripts))
+          this.valid.push(false)
+        }
+        else if (workspqceScripts) {
+          workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), workspqceScripts))
           this.valid.push(false)
         }
         else {
