@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { dirname, join } from 'path'
 import * as vscode from 'vscode'
 
 const CARGO_LOGO = join(__dirname, '../res/cargo_logo.svg')
@@ -28,7 +28,7 @@ export class ScriptTreeItem extends vscode.TreeItem {
       command: 'cargoScripts.open',
       arguments: [label, cmd, cwd],
     }
-    cwd = cwd.substring(0, cwd.lastIndexOf('\\'))
+    cwd = dirname(cwd)
     this.cmd = cmd
     this.cwd = cwd
     this.tooltip = cmd

@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join, sep } from 'path'
 import { accessSync } from 'fs'
 
 export function getTomlPath(base: string) {
@@ -6,7 +6,7 @@ export function getTomlPath(base: string) {
 }
 
 export function replaceRootPath(path: string, workspace: string) {
-  return path.replace(workspace + '\\', '')
+  return path.replace(workspace + sep, '')
 }
 
 export function pathExists(path: string) {
