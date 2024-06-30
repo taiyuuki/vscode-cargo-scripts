@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Run scripts from Cargo.toml",
   "main": "./dist/index.js",
   "repository": {
@@ -19,7 +19,8 @@
   ],
   "icon": "res/cargo_scripts.png",
   "activationEvents": [
-    "workspaceContains:**/Cargo.toml"
+    "workspaceContains:**/Cargo.toml",
+    "onLanguage:rust"
   ],
   "contributes": {
     "commands": [
@@ -77,7 +78,7 @@
     ]
   },
   "scripts": {
-    "lint": "eslint --ext .js,.ts ./",
+    "lint": "eslint --fix",
     "dev": "tsup --watch",
     "build": "tsup",
     "bump:patch": "bump patch",
@@ -96,15 +97,22 @@
     "dist"
   ],
   "devDependencies": {
-    "@taiyuuki/eslint-config-ts": "^0.0.5",
+    "@taiyuuki/eslint-config": "^1.4.14",
     "@types/node": "^18.11.18",
     "@types/vscode": "^1.74.0",
     "@vscode/test-electron": "^2.2.2",
-    "eslint": "^8.10.0",
-    "tsup": "^6.4.0"
+    "eslint": "^9.6.0",
+    "tsup": "^8.1.0"
   },
   "dependencies": {
     "fast-glob": "^3.2.12",
-    "toml": "^3.0.0"
+    "js-toml": "^1.0.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "eslint": "9"
+      }
+    }
   }
 }
