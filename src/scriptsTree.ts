@@ -6,6 +6,8 @@ import tomlParser from 'toml'
 import fg from 'fast-glob'
 import { join } from 'path'
 
+const unqoutedKeyRegex = /(^\w+|^\w+-\w+|^\w+_\w+)\.(\w+)/gm
+
 export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem | WorkspaceTreeItem> {
   private readonly _onChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined>()
   public readonly onDidChangeTreeData = this._onChangeTreeData.event
@@ -68,7 +70,8 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
     this.valid = []
     this.folders.forEach(folder => {
       if (pathExists(folder)) {
-        const text = fs.readFileSync(folder, 'utf-8')
+        let text = fs.readFileSync(folder, 'utf-8')
+        text = text.replaceAll(unqoutedKeyRegex, "\"$1.$2\"")
         const toml = tomlParser.parse(text)
         const scripts = toml?.package?.metadata?.scripts
         const workspqceScripts = toml?.workspace?.metadata?.scripts
