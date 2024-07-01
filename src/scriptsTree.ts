@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { join } from 'node:path'
 import * as vscode from 'vscode'
-import { load } from 'js-toml'
+import { parse } from '@iarna/toml'
 import fg from 'fast-glob'
 import { ScriptTreeItem, WorkspaceTreeItem } from './treeItem'
 import { pathExists, replaceRootPath } from './utils'
@@ -69,7 +69,7 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
         this.folders.forEach(folder => {
             if (pathExists(folder)) {
                 const text = fs.readFileSync(folder, 'utf-8')
-                const toml = load(text) as Record<string, any>
+                const toml = parse(text) as Record<string, any>
                 const scripts = toml?.package?.metadata?.scripts
                 const workspqceScripts = toml?.workspace?.metadata?.scripts
                 if (scripts) {

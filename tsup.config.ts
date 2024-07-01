@@ -9,6 +9,6 @@ export default defineConfig({
     external: [
         'vscode',
     ],
-    noExternal: ['fast-glob', 'js-toml'],
+    noExternal: ['fast-glob', '@iarna/toml'],
     format: ['cjs'],
 })

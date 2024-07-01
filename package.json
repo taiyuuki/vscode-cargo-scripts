@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Run scripts from Cargo.toml",
   "main": "./dist/index.js",
   "repository": {
@@ -105,8 +105,8 @@
     "tsup": "^8.1.0"
   },
   "dependencies": {
-    "fast-glob": "^3.2.12",
-    "js-toml": "^1.0.0"
+    "@iarna/toml": "^2.2.5",
+    "fast-glob": "^3.2.12"
   },
   "pnpm": {
     "peerDependencyRules": {
