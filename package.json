@@ -97,16 +97,16 @@
     "dist"
   ],
   "devDependencies": {
-    "@taiyuuki/eslint-config": "^1.4.14",
-    "@types/node": "^18.11.18",
+    "@taiyuuki/eslint-config": "^1.4.18",
+    "@types/node": "^18.19.97",
     "@types/vscode": "^1.74.0",
-    "@vscode/test-electron": "^2.2.2",
-    "eslint": "^9.6.0",
-    "tsup": "^8.1.0"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.26.0",
+    "tsup": "^8.4.0"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
-    "fast-glob": "^3.2.12"
+    "fast-glob": "^3.3.3"
   },
   "pnpm": {
     "peerDependencyRules": {
