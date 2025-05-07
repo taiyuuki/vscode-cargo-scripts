@@ -83,11 +83,9 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                         return acc
                     }, scripts)
                     workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), scripts))
-                    this.valid.push(false)
                 }
                 
-                const scripts = toml?.package?.metadata?.scripts
-                    || toml?.workspace?.metadata?.scripts
+                const scripts = toml?.workspace?.metadata?.scripts || toml?.package?.metadata?.scripts
                 if (scripts) {
                     const workspaceScripts: ScriptItem = {}
                     
@@ -100,6 +98,9 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                         return acc
                     }, workspaceScripts)
                     workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), workspaceScripts))
+                }
+
+                if (alias || scripts) {
                     this.valid.push(false)
                 }
                 else {
