@@ -39,9 +39,20 @@ export function activate(context: vscode.ExtensionContext) {
     const refreshDispose = vscode.commands.registerCommand('cargoScripts.refresh', scriptsTree.emitDataChange.bind(scriptsTree))
     const completionDispose = vscode.languages.registerCompletionItemProvider([{ language: 'toml', pattern: '**/Cargo.toml' }], {
         provideCompletionItems(document, position) {
-            const linePrefix = document.lineAt(position).text.substring(0, position.character)
+            let linePrefix = document.lineAt(position).text.substring(0, position.character)
+            const len = linePrefix.length
+            linePrefix = linePrefix.trim()
             const detail = 'Cargo Scripts'
-            const documentation = new vscode.MarkdownString(`
+            const packageScripts = 'package.metadata.scripts'
+            const workspaceScripts = 'workspace.metadata.scripts'
+            if (!linePrefix.startsWith('[') && !linePrefix.startsWith('[')) {
+                return void 0
+            }
+
+            return [
+                {
+                    detail,
+                    documentation: new vscode.MarkdownString(`
 # Example
 
 \`\`\`toml
@@ -51,39 +62,33 @@ check = "cargo check"
 test = "cargo test"
 build = "cargo build"
 \`\`\`  
-      `.trim())
-            if (linePrefix.startsWith('[package.metadata.')) {
-                return [
-                    {
-                        detail,
-                        documentation,
-                        kind: vscode.CompletionItemKind.Field,
-                        label: 'package.metadata.scripts',
-                        insertText: 'scripts',
-                    },
-                ]
-            }
-            else if (linePrefix.startsWith('[package.')) {
-                return [
-                    {
-                        detail,
-                        documentation,
-                        kind: vscode.CompletionItemKind.Field,
-                        label: 'package.metadata',
-                        insertText: 'metadata',
-                    },
-                    {
-                        detail,
-                        documentation,
-                        kind: vscode.CompletionItemKind.Field,
-                        label: 'package.metadata.scripts',
-                        insertText: 'metadata.scripts',
-                    },
-                ]
-            }
-            else {
-                return void 0
-            }
+                `.trim()),
+                    kind: vscode.CompletionItemKind.Field,
+                    label: packageScripts,
+                    filterText: packageScripts,
+                    insertText: `${packageScripts}]`,
+                    range: new vscode.Range(position.line, 1, position.line, Math.max(len, packageScripts.length)),
+                },
+                {
+                    detail,
+                    documentation: new vscode.MarkdownString(`
+# Example
+
+\`\`\`toml
+[workspace.metadata.scripts]
+run = "cargo run"
+check = "cargo check"
+test = "cargo test"
+build = "cargo build"
+\`\`\`
+`.trim()),
+                    kind: vscode.CompletionItemKind.Field,
+                    label: workspaceScripts,
+                    filterText: workspaceScripts,
+                    insertText: `${workspaceScripts}]`,
+                    range: new vscode.Range(position.line, 1, position.line, Math.max(len, workspaceScripts.length)),
+                },
+            ]
         },
     }, '.')
 
