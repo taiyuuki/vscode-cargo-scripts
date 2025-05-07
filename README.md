@@ -13,21 +13,19 @@
   </a>
 </p>
 
-A Visual Studio Code extension that helps Rust developers to run Cargo scripts directly from the sidebar.
+A Visual Studio Code extension that helps Rust developers run Cargo scripts directly from the sidebar - similar to npm scripts in `package.json`.
 
-Just like the scripts in NPM's `package.json`.
+# ✨ Features
 
-## ✨ Features
-
-- 🚀 Auto-detect `.cargo/config.toml` and `Cargo.toml` configurations
-- ⚡ One-click script execution (click in sidebar)
+- 🚀 Auto-detects `.cargo/config.toml` and `Cargo.toml` configurations
+- ⚡ One-click script execution via sidebar
 - 🔍 Auto-reload on config changes
 
-## 🛠 Installation
+# 🛠 Installation
 
 1. Open VS Code Extensions Marketplace
 2. Search for `Cargo Scripts` or `taiyuuki.vscode-cargo-scripts`
-3. Click Install
+3. Click **Install**
 4. Reload the editor
 
 Or install via command line:
@@ -36,42 +34,43 @@ Or install via command line:
 code --install-extension taiyuuki.vscode-cargo-scripts
 ```
 
-## 🚦 Usage
+# 🚦 Usage
 
-You can define your scripts in `.cargo/config.toml` or `Cargo.toml`.
+Define your scripts in either `.cargo/config.toml` or `Cargo.toml`.
 
-### [alias] in `.cargo/config.toml` (Recommended)
+## [alias] in `.cargo/config.toml` (Recommended)
 
-Refer to [The Cargo Book](https://doc.rust-lang.org/cargo/reference/config.html#alias) for more details about the `[alias]` section.
+Refer to [The Cargo Book](https://doc.rust-lang.org/cargo/reference/config.html#alias) for details about the `[alias]` section.
 
-For example:
+Example configuration:
 
 ```toml
 [alias]
-r  = "run --release"
-b = "build --release"
+r  = "run --release"
+b = "build --release"
 t = ["test", "--", "--nocapture"]
 ```
 
-Then you will find the CARGO SCRIPTS on the sidebar, Notice how all scripts have a Run icon next to them, you can run script by clicking on the icon.
+The scripts will appear in the `CARGO SCRIPTS` sidebar. Click the ▶️ icon next to any script to execute it.
 
-### `Cargo.toml`
+# `Cargo.toml` Configuration
 
-Adding a [package.metadata.scripts] or [workspace.metadata.scripts] (If you are in a workspace) section to the Cargo.toml.
+Add a `[package.metadata.scripts]` or `[workspace.metadata.scripts]` section (for workspace projects).
 
-Noticing that the value should be a full command line string, do not omit the prefix like `cargo`.
+Important notes:
 
-For example:
+1. Commands must be full command-line strings (include cargo prefix)
+2. Workspace configuration takes precedence over package configuration
+
+Example:
 
 ```toml
 [package.metadata.scripts]
-run = "cargo run"
-build = "cargo build --release"
-test = "cargo test -- --nocapture"
+run = "cargo run"
+build = "cargo build --release"
+test = "cargo test -- --nocapture"
 
-# or if you are using a workspace
+# For workspace projects
 [workspace.metadata.scripts]
-run = "cargo run"
-build = "cargo build --release"
-test = "cargo test -- --nocapture"
+lint = "cargo clippy --all-targets -- -D warnings"
 ```

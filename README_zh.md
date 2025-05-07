@@ -17,13 +17,13 @@
 
 就像NPM`package.json`中的`scripts`一样。
 
-## ✨ 功能特性
+# ✨ 功能特性
 
 - 🚀 自动解析`.cargo/config.toml` 或 `Cargo.toml` 配置
 - ⚡ 一键运行脚本（侧边栏点击即可）
 - 🔍 自动监听配置文件变化
 
-## 🛠 安装
+# 🛠 安装
 
 1. 打开VS Code扩展市场
 2. 搜索 `Cargo Scripts` 或者 `taiyuuki.vscode-cargo-scripts`
@@ -36,11 +36,11 @@
 code --install-extension taiyuuki.vscode-cargo-scripts
 ```
 
-## 🚦 使用
+# 🚦 使用
 
 你可以在`.cargo/config.toml`或`Cargo.toml`文件中定义脚本。
 
-### `.cargo/config.toml`（推荐）
+## `.cargo/config.toml`（推荐）
 
 参考[The Cargo Book](https://doc.rust-lang.org/cargo/reference/config.html#alias)了解更多关于`[alias]`部分的内容。
 
@@ -55,7 +55,7 @@ t = ["test", "--", "--nocapture"]
 
 然后你会在侧边栏看到CARGO SCRIPTS，注意所有脚本后面都有一个运行图标，你可以通过点击图标运行脚本。
 
-### `Cargo.toml`
+## `Cargo.toml`
 
 注意，脚本的值应该是完整的命令行字符串，不能省略前缀`cargo`。
 

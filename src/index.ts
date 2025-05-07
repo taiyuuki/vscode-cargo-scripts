@@ -2,7 +2,7 @@ import { resolve } from 'node:path'
 import * as vscode from 'vscode'
 import { executeCommand } from './terminal'
 import { CargoScriptsTree } from './scriptsTree'
-import { pathExists } from './utils'
+import { escapeRegExp, pathExists } from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
     const workspaceFolders = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
@@ -27,8 +27,14 @@ export function activate(context: vscode.ExtensionContext) {
     const openDispose = vscode.commands.registerCommand('cargoScripts.open', (name, cwd, description) => {
         if (pathExists(cwd)) {
             vscode.workspace.openTextDocument(vscode.Uri.file(cwd)).then(doc => {
-                const reg = new RegExp(`${name}\\s*=\\s*[\\"\\']${description}[\\"\\']`, 'i')
-                const match = reg.exec(doc.getText())
+                const reg1 = new RegExp(`${name}\\s*=\\s*["']${description}["']`, 'i')
+                const reg2Str = escapeRegExp(description)
+                    .replace(/"/g, '["\']')
+                    .replace(/\s*/, '\\s*')
+                const reg2 = new RegExp(`${name}\\s*=\\s*${reg2Str}`, 'i')
+                const text = doc.getText()
+                const match = reg1.exec(text) || reg2.exec(text)
+                
                 if (match) {
                     const pst = match.index
                     vscode.window.showTextDocument(doc, { selection: new vscode.Range(doc.positionAt(pst), doc.positionAt(pst + match[0].length)) })

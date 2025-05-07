@@ -1,0 +1,7 @@
+{
+    "displayName": "Cargo Scripts",
+    "description": "Execute Cargo scripts from the sidebar.",
+    "run": "Run",
+    "refresh": "Refresh",
+    "open": "Open"
+}

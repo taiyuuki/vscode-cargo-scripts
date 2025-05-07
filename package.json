@@ -1,9 +1,9 @@
 {
   "name": "vscode-cargo-scripts",
-  "displayName": "Cargo Scripts",
+  "displayName": "%displayName%",
   "publisher": "taiyuuki",
-  "version": "0.3.1",
-  "description": "Run scripts from Cargo.toml",
+  "version": "0.4.0",
+  "description": "%description%",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
@@ -26,16 +26,16 @@
     "commands": [
       {
         "command": "cargoScripts.run",
-        "title": "Run",
+        "title": "%run%",
         "icon": "$(debug-start)"
       },
       {
         "command": "cargoScripts.open",
-        "title": "Open"
+        "title": "%open%"
       },
       {
         "command": "cargoScripts.refresh",
-        "title": "Refresh",
+        "title": "%refresh%",
         "icon": "$(search-refresh)"
       }
     ],
@@ -43,7 +43,7 @@
       "explorer": [
         {
           "id": "cargoScripts",
-          "name": "Cargo Scripts",
+          "name": "%displayName%",
           "when": "showCargoScript"
         }
       ]
@@ -93,14 +93,12 @@
   ],
   "author": "taiyuuki <taiyuuki@qq.com>",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "devDependencies": {
     "@taiyuuki/eslint-config": "^1.4.18",
     "@types/node": "^18.19.97",
     "@types/vscode": "^1.74.0",
     "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.3.2",
     "eslint": "^9.26.0",
     "tsup": "^8.4.0"
   },

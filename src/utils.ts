@@ -24,3 +24,7 @@ export function objEntries<T extends Record<string, unknown>>(obj: T): [string, 
     return Object.entries(obj) as [string, T[keyof T]][]
 }
 
+export function escapeRegExp(str: string) {
+    return str.replace(/[$()*+.?[\\\]^{|}]/g, '\\$&')
+}
+

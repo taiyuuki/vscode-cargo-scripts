@@ -1,0 +1,7 @@
+{
+    "displayName": "Cargo脚本",
+    "description": "在侧边栏中执行Cargo脚本。",
+    "run": "运行",
+    "refresh": "刷新",
+    "open": "打开"
+}

@@ -1,0 +1,12 @@
+node_modules
+src
+scripts
+.vscode
+.git
+.gitignore
+eslint.config.mjs
+eslint.config.js
+eslint.config.cjs
+pnpm-lock.yaml
+tsup.config.ts
+tsconfig.json
