@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import * as vscode from 'vscode'
 import { executeCommand } from './terminal'
 import { CargoScriptsTree } from './scriptsTree'
@@ -12,16 +13,21 @@ export function activate(context: vscode.ExtensionContext) {
     const treeData = vscode.window.registerTreeDataProvider('cargoScripts', scriptsTree)
     const runDispose = vscode.commands.registerCommand('cargoScripts.run', item => {
         if (pathExists(item.cwd)) {
-            executeCommand(item.label, item.cmd, item.cwd)
+            if (item.cwd.match(/.*?\.cargo$/)) {
+                executeCommand(item.label, item.cmd, resolve(item.cwd, '..'))
+            }
+            else {
+                executeCommand(item.label, item.cmd, item.cwd)
+            }
         }
         else {
             scriptsTree.emitDataChange.call(scriptsTree)
         }
     })
-    const openDispose = vscode.commands.registerCommand('cargoScripts.open', (label, cmd, cwd) => {
+    const openDispose = vscode.commands.registerCommand('cargoScripts.open', (name, cwd, description) => {
         if (pathExists(cwd)) {
             vscode.workspace.openTextDocument(vscode.Uri.file(cwd)).then(doc => {
-                const reg = new RegExp(`${label}\\s*=\\s*[\\"\\']${cmd}[\\"\\']`, 'i')
+                const reg = new RegExp(`${name}\\s*=\\s*[\\"\\']${description}[\\"\\']`, 'i')
                 const match = reg.exec(doc.getText())
                 if (match) {
                     const pst = match.index

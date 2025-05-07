@@ -3,8 +3,9 @@ import { join } from 'node:path'
 import * as vscode from 'vscode'
 import { parse } from '@iarna/toml'
 import fg from 'fast-glob'
+import type { ScriptItem } from './treeItem'
 import { ScriptTreeItem, WorkspaceTreeItem } from './treeItem'
-import { pathExists, replaceRootPath } from './utils'
+import { objEntries, pathExists, replaceRootPath } from './utils'
 
 export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem | WorkspaceTreeItem> {
     private readonly _onChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined>()
@@ -15,13 +16,13 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
     constructor(private readonly workspaceRoot: string) {
         this.valid = []
         this.folders = this._getFolders()
-        const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '**/Cargo.toml'))
+        const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '{**/Cargo.toml,**/.cargo/config.toml,**/.cargo/config}'))
         watcher.onDidChange(this.emitDataChange.bind(this))
         vscode.commands.executeCommand('setContext', 'showCargoScript', true)
     }
 
     _getFolders() {
-        return fg.sync(['**/Cargo.toml'], {
+        return fg.sync(['**/Cargo.toml', '**/.cargo/config.toml', '**/.cargo/config'], {
             cwd: this.workspaceRoot,
             ignore: ['target', 'node_modules', 'dist', 'src'],
             caseSensitiveMatch: false,
@@ -70,14 +71,35 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
             if (pathExists(folder)) {
                 const text = fs.readFileSync(folder, 'utf-8')
                 const toml = parse(text) as Record<string, any>
-                const scripts = toml?.package?.metadata?.scripts
-                const workspqceScripts = toml?.workspace?.metadata?.scripts
-                if (scripts) {
+                const alias = toml?.alias
+                if(alias) {
+                    const scripts: ScriptItem = {}
+                    objEntries(alias).reduce((acc, [key, value]) => {
+                        acc[key] = {
+                            description: Array.isArray(value) ? `[${value.join(', ')}]` : value,
+                            cmd: `cargo ${key}`,
+                        }
+
+                        return acc
+                    }, scripts)
                     workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), scripts))
                     this.valid.push(false)
                 }
-                else if (workspqceScripts) {
-                    workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), workspqceScripts))
+                
+                const scripts = toml?.package?.metadata?.scripts
+                    || toml?.workspace?.metadata?.scripts
+                if (scripts) {
+                    const workspaceScripts: ScriptItem = {}
+                    
+                    objEntries(scripts).reduce((acc, [key, value]) => {
+                        acc[key] = {
+                            description: value,
+                            cmd: value,
+                        }
+
+                        return acc
+                    }, workspaceScripts)
+                    workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), workspaceScripts))
                     this.valid.push(false)
                 }
                 else {
@@ -93,11 +115,11 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
         return workspaceTreeItems
     }
 
-    private _getScriptsTreeItem(folder: string, scripts: Record<string, string>) {
+    private _getScriptsTreeItem(folder: string, scripts: ScriptItem) {
         const scriptTreeItems: ScriptTreeItem[] = []
         if (pathExists(folder)) {
             Object.keys(scripts).forEach(key => {
-                scriptTreeItems.push(new ScriptTreeItem(key, scripts[key], folder))
+                scriptTreeItems.push(new ScriptTreeItem(key, scripts[key].cmd, folder, scripts[key].description))
             })
         }
 

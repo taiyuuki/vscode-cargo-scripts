@@ -3,10 +3,12 @@ import * as vscode from 'vscode'
 
 const CARGO_LOGO = join(__dirname, '../res/cargo_logo.svg')
 
+export type ScriptItem = Record<string, { description: string, cmd: string }>
+
 export class WorkspaceTreeItem extends vscode.TreeItem {
     constructor(
         public label: string,
-        public scripts: Record<string, string>,
+        public scripts: ScriptItem,
         state = vscode.TreeItemCollapsibleState.Expanded,
     ) {
         super(label, state)
@@ -21,19 +23,19 @@ export class ScriptTreeItem extends vscode.TreeItem {
     cmd: string
     cwd: string
 
-    constructor(label: string, cmd: string, cwd: string) {
+    constructor(label: string, cmd: string, cwd: string, description?: string) {
         super(label, vscode.TreeItemCollapsibleState.None)
         this.name = label
         this.command = {
             title: 'Open',
             command: 'cargoScripts.open',
-            arguments: [label, cmd, cwd],
+            arguments: [label, cwd, description],
         }
         cwd = dirname(cwd)
         this.cmd = cmd
         this.cwd = cwd
-        this.tooltip = cmd
-        this.description = cmd
+        this.tooltip = description
+        this.description = description
         this.contextValue = 'script_item'
     }
 

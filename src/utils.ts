@@ -19,3 +19,8 @@ export function pathExists(path: string) {
         return false
     }
 }
+
+export function objEntries<T extends Record<string, unknown>>(obj: T): [string, T[keyof T]][] {
+    return Object.entries(obj) as [string, T[keyof T]][]
+}
+
