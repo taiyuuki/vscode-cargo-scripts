@@ -75,9 +75,13 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                 if(alias) {
                     const scripts: ScriptItem = {}
                     objEntries(alias).reduce((acc, [key, value]) => {
+                        const expandedValue = Array.isArray(value) ? value.join(' ') : value
+
+                        // Keep original description for file jump matching
+                        const originalValue = Array.isArray(value) ? JSON.stringify(value).replace(/,([^\\])/g, ', $1') : value
                         acc[key] = {
-                            description: Array.isArray(value) ? JSON.stringify(value).replace(/,([^\\])/g, ', $1') : value,
-                            cmd: `cargo ${key}`,
+                            description: originalValue,
+                            cmd: `cargo ${expandedValue}`,
                         }
 
                         return acc

@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import * as vscode from 'vscode'
-import { executeCommand } from './terminal'
+import { debugCommand, executeCommand } from './terminal'
 import { CargoScriptsTree } from './scriptsTree'
 import { escapeRegExp, pathExists } from './utils'
 
@@ -18,6 +18,19 @@ export function activate(context: vscode.ExtensionContext) {
             }
             else {
                 executeCommand(item.label, item.cmd, item.cwd)
+            }
+        }
+        else {
+            scriptsTree.emitDataChange.call(scriptsTree)
+        }
+    })
+    const debugDispose = vscode.commands.registerCommand('cargoScripts.debug', item => {
+        if (pathExists(item.cwd)) {
+            if (item.cwd.match(/.*?\.cargo$/)) {
+                debugCommand(item.label, item.cmd, resolve(item.cwd, '..'))
+            }
+            else {
+                debugCommand(item.label, item.cmd, item.cwd)
             }
         }
         else {
@@ -104,7 +117,7 @@ build = "cargo build"
         },
     }, '.')
 
-    context.subscriptions.push(treeData, runDispose, openDispose, refreshDispose, completionDispose)
+    context.subscriptions.push(treeData, runDispose, debugDispose, openDispose, refreshDispose, completionDispose)
 }
 
 export function deactivate(context: vscode.ExtensionContext) {

@@ -2,6 +2,7 @@
     "displayName": "Cargo Scripts",
     "description": "Execute Cargo scripts from the sidebar.",
     "run": "Run",
+    "debug": "Debug",
     "refresh": "Refresh",
     "open": "Open"
 }

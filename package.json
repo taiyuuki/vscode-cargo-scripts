@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "%displayName%",
   "publisher": "taiyuuki",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "%description%",
   "main": "./dist/index.js",
   "repository": {
@@ -28,6 +28,11 @@
         "command": "cargoScripts.run",
         "title": "%run%",
         "icon": "$(debug-start)"
+      },
+      {
+        "command": "cargoScripts.debug",
+        "title": "%debug%",
+        "icon": "$(debug-alt)"
       },
       {
         "command": "cargoScripts.open",
@@ -61,6 +66,12 @@
           "group": "inline",
           "when": "viewItem == script_item",
           "icon": "$(run)"
+        },
+        {
+          "command": "cargoScripts.debug",
+          "group": "inline",
+          "when": "viewItem == script_item",
+          "icon": "$(debug-alt)"
         }
       ]
     },
