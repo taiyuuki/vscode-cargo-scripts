@@ -4,7 +4,7 @@ export default defineConfig({
     entry: ['src/index.ts'],
     target: 'esnext',
     splitting: false,
-    sourcemap: true,
+    sourcemap: false,
     clean: true,
     external: [
         'vscode',
