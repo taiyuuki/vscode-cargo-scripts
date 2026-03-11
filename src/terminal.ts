@@ -13,10 +13,10 @@ export function executeCommand(label: string, cmd: string, cwd: string) {
     }
     else {
         const terminalOptions: vscode.TerminalOptions = {
-            name: terminalName,
+            name:         terminalName,
             cwd,
             hideFromUser: true,
-            iconPath: new vscode.ThemeIcon('tools'),
+            iconPath:     new vscode.ThemeIcon('tools'),
         }
 
         terminal = vscode.window.createTerminal(terminalOptions)
@@ -140,12 +140,12 @@ export async function debugCommand(label: string, cmd: string, cwd: string) {
     // Create debug configuration using CodeLLDB's cargo mode
     // CodeLLDB will handle the build automatically
     const debugConfig: vscode.DebugConfiguration = {
-        type: 'lldb',
+        type:    'lldb',
         request: 'launch',
-        name: `Debug: ${label}`,
-        cargo: { args: cargoArgs },
-        args: programArgs,
-        cwd: cwd,
+        name:    `Debug: ${label}`,
+        cargo:   { args: cargoArgs },
+        args:    programArgs,
+        cwd:     cwd,
     }
 
     // Start debugging

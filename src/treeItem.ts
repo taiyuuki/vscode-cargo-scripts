@@ -20,15 +20,15 @@ export class WorkspaceTreeItem extends vscode.TreeItem {
 
 export class ScriptTreeItem extends vscode.TreeItem {
     name: string
-    cmd: string
-    cwd: string
+    cmd:  string
+    cwd:  string
 
     constructor(label: string, cmd: string, cwd: string, description?: string) {
         super(label, vscode.TreeItemCollapsibleState.None)
         this.name = label
         this.command = {
-            title: 'Open',
-            command: 'cargoScripts.open',
+            title:     'Open',
+            command:   'cargoScripts.open',
             arguments: [label, cwd, description],
         }
         cwd = dirname(cwd)

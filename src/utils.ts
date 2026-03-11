@@ -15,7 +15,7 @@ export function pathExists(path: string) {
 
         return true
     }
-    catch (_err) {
+    catch(_err) {
         return false
     }
 }

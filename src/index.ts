@@ -88,11 +88,11 @@ test = "cargo test"
 build = "cargo build"
 \`\`\`  
                 `.trim()),
-                    kind: vscode.CompletionItemKind.Field,
-                    label: packageScripts,
+                    kind:       vscode.CompletionItemKind.Field,
+                    label:      packageScripts,
                     filterText: packageScripts,
                     insertText: `${packageScripts}]`,
-                    range: new vscode.Range(position.line, 1, position.line, Math.max(len, packageScripts.length)),
+                    range:      new vscode.Range(position.line, 1, position.line, Math.max(len, packageScripts.length)),
                 },
                 {
                     detail,
@@ -107,11 +107,11 @@ test = "cargo test"
 build = "cargo build"
 \`\`\`
 `.trim()),
-                    kind: vscode.CompletionItemKind.Field,
-                    label: workspaceScripts,
+                    kind:       vscode.CompletionItemKind.Field,
+                    label:      workspaceScripts,
                     filterText: workspaceScripts,
                     insertText: `${workspaceScripts}]`,
-                    range: new vscode.Range(position.line, 1, position.line, Math.max(len, workspaceScripts.length)),
+                    range:      new vscode.Range(position.line, 1, position.line, Math.max(len, workspaceScripts.length)),
                 },
             ]
         },
