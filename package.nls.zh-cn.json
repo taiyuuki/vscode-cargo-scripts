@@ -1,8 +1,7 @@
 {
-    "displayName": "Cargo脚本",
-    "description": "在侧边栏中执行Cargo脚本。",
-    "run": "运行",
-    "debug": "调试",
-    "refresh": "刷新",
-    "open": "打开"
+    "vscode-cargo-scripts.Run": "运行",
+    "vscode-cargo-scripts.Debug": "调试",
+    "vscode-cargo-scripts.Refresh": "刷新",
+    "vscode-cargo-scripts.DisplayName": "Cargo脚本",
+    "vscode-cargo-scripts.Description":  "在侧边栏中执行Cargo脚本。"
 }

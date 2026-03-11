@@ -2,6 +2,7 @@ import { resolve } from 'node:path'
 import * as vscode from 'vscode'
 import { debugCommand, executeCommand } from './terminal'
 import { CargoScriptsTree } from './scriptsTree'
+import { CargoScriptsCodeLensProvider } from './codeLens'
 import { escapeRegExp, pathExists } from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
@@ -117,7 +118,15 @@ build = "cargo build"
         },
     }, '.')
 
-    context.subscriptions.push(treeData, runDispose, debugDispose, openDispose, refreshDispose, completionDispose)
+    // Register CodeLens provider for Cargo.toml and .cargo/config.toml
+    const codeLensProvider = new CargoScriptsCodeLensProvider()
+    const codeLensDispose = vscode.languages.registerCodeLensProvider([
+        { language: 'toml', pattern: '**/Cargo.toml' },
+        { language: 'toml', pattern: '**/.cargo/config.toml' },
+        { language: 'toml', pattern: '**/.cargo/config' },
+    ], codeLensProvider)
+
+    context.subscriptions.push(treeData, runDispose, debugDispose, openDispose, refreshDispose, completionDispose, codeLensDispose)
 }
 
 export function deactivate(context: vscode.ExtensionContext) {
