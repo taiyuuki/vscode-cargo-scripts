@@ -1,0 +1,5 @@
+{
+    "vscode-cargo-scripts.Run": "Esegui",
+    "vscode-cargo-scripts.Debug": "Debug",
+    "vscode-cargo-scripts.Open": "Apri"
+}
