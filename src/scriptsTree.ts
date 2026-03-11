@@ -10,28 +10,43 @@ import { objEntries, pathExists, replaceRootPath } from './utils'
 export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem | WorkspaceTreeItem> {
     private readonly _onChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined>()
     public readonly onDidChangeTreeData = this._onChangeTreeData.event
-    private folders: string[]
-    valid: boolean[]
+    private folders: string[] = []
+    valid:           boolean[] = []
 
     constructor(private readonly workspaceRoot: string) {
-        this.valid = []
-        this.folders = this._getFolders()
+        this._init()
         const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '{**/Cargo.toml,**/.cargo/config.toml,**/.cargo/config}'))
         watcher.onDidChange(this.emitDataChange.bind(this))
-        vscode.commands.executeCommand('setContext', 'showCargoScript', true)
     }
 
-    _getFolders() {
-        return fg.sync(['**/Cargo.toml', '**/.cargo/config.toml', '**/.cargo/config'], {
-            cwd: this.workspaceRoot,
-            ignore: ['target', 'node_modules', 'dist', 'src'],
+    private async _init() {
+        this.folders = await this._getFolders()
+        if (this.folders.length > 0) {
+            vscode.commands.executeCommand('setContext', 'showCargoScript', true)
+        }
+        this._onChangeTreeData.fire(void 0)
+    }
+
+    private async _getFolders() {
+        const results = await fg(['**/Cargo.toml', '**/.cargo/config.toml', '**/.cargo/config'], {
+            cwd:                this.workspaceRoot,
+            ignore:             [
+                '**/node_modules/**',
+                '**/target/**',
+                '**/.git/**',
+                '**/dist/**',
+                '**/build/**',
+                '**/out/**',
+            ],
             caseSensitiveMatch: false,
-        }).map(folder => join(this.workspaceRoot, folder))
+        })
+
+        return results.map(folder => join(this.workspaceRoot, folder))
     }
 
-    emitDataChange(e?: vscode.Uri) {
+    async emitDataChange(e?: vscode.Uri) {
         if (e?.fsPath && !this.folders.includes(e.fsPath)) {
-            this.folders = this._getFolders()
+            this.folders = await this._getFolders()
         }
         if (!this.valid.includes(false)) {
             this._showScriptTree(true)
@@ -81,7 +96,7 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                         const originalValue = Array.isArray(value) ? JSON.stringify(value).replace(/,([^\\])/g, ', $1') : value
                         acc[key] = {
                             description: originalValue,
-                            cmd: `cargo ${expandedValue}`,
+                            cmd:         `cargo ${expandedValue}`,
                         }
 
                         return acc
@@ -96,7 +111,7 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                     objEntries(scripts).reduce((acc, [key, value]) => {
                         acc[key] = {
                             description: value,
-                            cmd: value,
+                            cmd:         value,
                         }
 
                         return acc
