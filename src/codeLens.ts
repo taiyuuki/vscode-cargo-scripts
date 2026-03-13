@@ -41,9 +41,9 @@ export class CargoScriptsCodeLensProvider implements vscode.CodeLensProvider {
 
             // Run CodeLens
             const runLens = new vscode.CodeLens(range, {
-                title:     `$(run) ${vscode.l10n.t('vscode-cargo-scripts.Run')}`,
+                title:     `$(run) ${vscode.l10n.t('Run')}`,
                 command:   'cargoScripts.run',
-                tooltip:   `${vscode.l10n.t('vscode-cargo-scripts.Run')}: ${script.key}`,
+                tooltip:   `${vscode.l10n.t('Run')}: ${script.key}`,
                 arguments: [{
                     label: script.key,
                     cmd:   script.cmd,
@@ -54,9 +54,9 @@ export class CargoScriptsCodeLensProvider implements vscode.CodeLensProvider {
 
             // Debug CodeLens
             const debugLens = new vscode.CodeLens(range, {
-                title:     `$(debug-alt) ${vscode.l10n.t('vscode-cargo-scripts.Debug')}`,
+                title:     `$(debug-alt) ${vscode.l10n.t('Debug')}`,
                 command:   'cargoScripts.debug',
-                tooltip:   `${vscode.l10n.t('vscode-cargo-scripts.Debug')}: ${script.key}`,
+                tooltip:   `${vscode.l10n.t('Debug')}: ${script.key}`,
                 arguments: [{
                     label: script.key,
                     cmd:   script.cmd,

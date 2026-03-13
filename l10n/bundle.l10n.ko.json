@@ -1,5 +1,5 @@
 {
-    "vscode-cargo-scripts.Run": "실행",
-    "vscode-cargo-scripts.Debug": "디버그",
-    "vscode-cargo-scripts.Open": "열기"
+    "Run": "실행",
+    "Debug": "디버그",
+    "Open": "열기"
 }

@@ -1,8 +1,8 @@
 {
   "name": "vscode-cargo-scripts",
-  "displayName": "%vscode-cargo-scripts.DisplayName%",
+  "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "description": "%vscode-cargo-scripts.Description%",
   "main": "./dist/index.js",
   "l10n": "./l10n",

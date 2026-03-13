@@ -1,5 +1,5 @@
 {
-    "vscode-cargo-scripts.Run": "运行",
-    "vscode-cargo-scripts.Debug": "调试",
-    "vscode-cargo-scripts.Open": "打开"
+    "Run": "运行",
+    "Debug": "调试",
+    "Open": "打开"
 }

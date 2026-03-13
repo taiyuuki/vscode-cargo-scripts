@@ -1,5 +1,5 @@
 {
-    "vscode-cargo-scripts.Run": "Run",
-    "vscode-cargo-scripts.Debug": "Debug",
-    "vscode-cargo-scripts.Open": "Open"
+    "Run": "Run",
+    "Debug": "Debug",
+    "Open": "Open"
 }
