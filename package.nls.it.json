@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "Esegui",
-    "vscode-cargo-scripts.Debug": "Debug",
-    "vscode-cargo-scripts.Open": "Apri",
-    "vscode-cargo-scripts.Refresh": "Aggiorna",
-    "vscode-cargo-scripts.DisplayName": "Script Cargo",
-    "vscode-cargo-scripts.Description": "Esegui script Cargo dalla barra laterale."
+    "Run": "Esegui",
+    "Debug": "Debug",
+    "Open": "Apri",
+    "Refresh": "Aggiorna",
+    "DisplayName": "Script Cargo",
+    "Description": "Esegui script Cargo dalla barra laterale."
 }

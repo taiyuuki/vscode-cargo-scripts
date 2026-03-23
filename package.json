@@ -2,8 +2,8 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.6.2",
-  "description": "%vscode-cargo-scripts.Description%",
+  "version": "0.6.3",
+  "description": "%Description%",
   "main": "./dist/index.js",
   "l10n": "./l10n",
   "repository": {
@@ -27,21 +27,21 @@
     "commands": [
       {
         "command": "cargoScripts.run",
-        "title": "%vscode-cargo-scripts.Run%",
+        "title": "%Run%",
         "icon": "$(debug-start)"
       },
       {
         "command": "cargoScripts.debug",
-        "title": "%vscode-cargo-scripts.Debug%",
+        "title": "%Debug%",
         "icon": "$(debug-alt)"
       },
       {
         "command": "cargoScripts.open",
-        "title": "%vscode-cargo-scripts.Open%"
+        "title": "%Open%"
       },
       {
         "command": "cargoScripts.refresh",
-        "title": "%vscode-cargo-scripts.Refresh%",
+        "title": "%Refresh%",
         "icon": "$(search-refresh)"
       }
     ],
@@ -49,7 +49,7 @@
       "explorer": [
         {
           "id": "cargoScripts",
-          "name": "%vscode-cargo-scripts.DisplayName%",
+          "name": "%DisplayName%",
           "when": "showCargoScript"
         }
       ]

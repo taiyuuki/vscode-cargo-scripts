@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "Запустить",
-    "vscode-cargo-scripts.Debug": "Отладка",
-    "vscode-cargo-scripts.Open": "Открыть",
-    "vscode-cargo-scripts.Refresh": "Обновить",
-    "vscode-cargo-scripts.DisplayName": "Скрипты Cargo",
-    "vscode-cargo-scripts.Description": "Запуск скриптов Cargo из боковой панели."
+    "Run": "Запустить",
+    "Debug": "Отладка",
+    "Open": "Открыть",
+    "Refresh": "Обновить",
+    "DisplayName": "Скрипты Cargo",
+    "Description": "Запуск скриптов Cargo из боковой панели."
 }

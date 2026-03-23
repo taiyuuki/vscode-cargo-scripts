@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "Exécuter",
-    "vscode-cargo-scripts.Debug": "Déboguer",
-    "vscode-cargo-scripts.Open": "Ouvrir",
-    "vscode-cargo-scripts.Refresh": "Actualiser",
-    "vscode-cargo-scripts.DisplayName": "Scripts Cargo",
-    "vscode-cargo-scripts.Description": "Exécuter des scripts Cargo depuis la barre latérale."
+    "Run": "Exécuter",
+    "Debug": "Déboguer",
+    "Open": "Ouvrir",
+    "Refresh": "Actualiser",
+    "DisplayName": "Scripts Cargo",
+    "Description": "Exécuter des scripts Cargo depuis la barre latérale."
 }

@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "Ausführen",
-    "vscode-cargo-scripts.Debug": "Debuggen",
-    "vscode-cargo-scripts.Open": "Öffnen",
-    "vscode-cargo-scripts.Refresh": "Aktualisieren",
-    "vscode-cargo-scripts.DisplayName": "Cargo-Skripte",
-    "vscode-cargo-scripts.Description": "Cargo-Skripte über die Seitenleiste ausführen."
+    "Run": "Ausführen",
+    "Debug": "Debuggen",
+    "Open": "Öffnen",
+    "Refresh": "Aktualisieren",
+    "DisplayName": "Cargo-Skripte",
+    "Description": "Cargo-Skripte über die Seitenleiste ausführen."
 }

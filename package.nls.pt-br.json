@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "Executar",
-    "vscode-cargo-scripts.Debug": "Depurar",
-    "vscode-cargo-scripts.Open": "Abrir",
-    "vscode-cargo-scripts.Refresh": "Atualizar",
-    "vscode-cargo-scripts.DisplayName": "Scripts Cargo",
-    "vscode-cargo-scripts.Description": "Executar scripts Cargo a partir da barra lateral."
+    "Run": "Executar",
+    "Debug": "Depurar",
+    "Open": "Abrir",
+    "Refresh": "Atualizar",
+    "DisplayName": "Scripts Cargo",
+    "Description": "Executar scripts Cargo a partir da barra lateral."
 }

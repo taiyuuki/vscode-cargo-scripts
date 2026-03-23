@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "執行",
-    "vscode-cargo-scripts.Debug": "偵錯",
-    "vscode-cargo-scripts.Open": "開啟",
-    "vscode-cargo-scripts.Refresh": "重新整理",
-    "vscode-cargo-scripts.DisplayName": "Cargo 指令碼",
-    "vscode-cargo-scripts.Description": "從側邊欄執行 Cargo 指令碼。"
+    "Run": "執行",
+    "Debug": "偵錯",
+    "Open": "開啟",
+    "Refresh": "重新整理",
+    "DisplayName": "Cargo 指令碼",
+    "Description": "從側邊欄執行 Cargo 指令碼。"
 }

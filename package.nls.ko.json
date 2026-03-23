@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "실행",
-    "vscode-cargo-scripts.Debug": "디버그",
-    "vscode-cargo-scripts.Open": "열기",
-    "vscode-cargo-scripts.Refresh": "새로고침",
-    "vscode-cargo-scripts.DisplayName": "Cargo 스크립트",
-    "vscode-cargo-scripts.Description": "사이드바에서 Cargo 스크립트를 실행합니다."
+    "Run": "실행",
+    "Debug": "디버그",
+    "Open": "열기",
+    "Refresh": "새로고침",
+    "DisplayName": "Cargo 스크립트",
+    "Description": "사이드바에서 Cargo 스크립트를 실행합니다."
 }

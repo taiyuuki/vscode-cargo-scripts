@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "Run",
-    "vscode-cargo-scripts.Debug": "Debug",
-    "vscode-cargo-scripts.Open": "Open",
-    "vscode-cargo-scripts.Refresh": "Refresh",
-    "vscode-cargo-scripts.DisplayName": "Cargo Scripts",
-    "vscode-cargo-scripts.Description": "Execute Cargo scripts from the sidebar."
+    "Run": "Run",
+    "Debug": "Debug",
+    "Open": "Open",
+    "Refresh": "Refresh",
+    "DisplayName": "Cargo Scripts",
+    "Description": "Execute Cargo scripts from the sidebar."
 }

@@ -1,8 +1,8 @@
 {
-    "vscode-cargo-scripts.Run": "実行",
-    "vscode-cargo-scripts.Debug": "デバッグ",
-    "vscode-cargo-scripts.Open": "開く",
-    "vscode-cargo-scripts.Refresh": "更新",
-    "vscode-cargo-scripts.DisplayName": "Cargo スクリプト",
-    "vscode-cargo-scripts.Description": "サイドバーから Cargo スクリプトを実行します。"
+    "Run": "実行",
+    "Debug": "デバッグ",
+    "Open": "開く",
+    "Refresh": "更新",
+    "DisplayName": "Cargo スクリプト",
+    "Description": "サイドバーから Cargo スクリプトを実行します。"
 }
