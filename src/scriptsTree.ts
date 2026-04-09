@@ -11,19 +11,17 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
     private readonly _onChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined>()
     public readonly onDidChangeTreeData = this._onChangeTreeData.event
     private folders: string[] = []
-    valid:           boolean[] = []
 
     constructor(private readonly workspaceRoot: string) {
         this._init()
         const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '{**/Cargo.toml,**/.cargo/config.toml,**/.cargo/config}'))
         watcher.onDidChange(this.emitDataChange.bind(this))
+        watcher.onDidCreate(this.emitDataChange.bind(this))
+        watcher.onDidDelete(this.emitDataChange.bind(this))
     }
 
     private async _init() {
-        this.folders = await this._getFolders()
-        if (this.folders.length > 0) {
-            vscode.commands.executeCommand('setContext', 'showCargoScript', true)
-        }
+        await this._refreshFolders()
         this._onChangeTreeData.fire(void 0)
     }
 
@@ -44,13 +42,13 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
         return results.map(folder => join(this.workspaceRoot, folder))
     }
 
-    async emitDataChange(e?: vscode.Uri) {
-        if (e?.fsPath && !this.folders.includes(e.fsPath)) {
-            this.folders = await this._getFolders()
-        }
-        if (!this.valid.includes(false)) {
-            this._showScriptTree(true)
-        }
+    private async _refreshFolders() {
+        this.folders = await this._getFolders()
+        this._showScriptTree(this._getWorkspaceTree().length > 0)
+    }
+
+    async emitDataChange(_e?: vscode.Uri) {
+        await this._refreshFolders()
         this._onChangeTreeData.fire(void 0)
     }
 
@@ -81,7 +79,6 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
 
     private _getWorkspaceTree() {
         const workspaceTreeItems: WorkspaceTreeItem[] = []
-        this.valid = []
         this.folders.forEach(folder => {
             if (pathExists(folder)) {
                 const text = fs.readFileSync(folder, 'utf-8')
@@ -118,19 +115,8 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                     }, workspaceScripts)
                     workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), workspaceScripts))
                 }
-
-                if (alias || scripts) {
-                    this.valid.push(false)
-                }
-                else {
-                    this.valid.push(true)
-                }
             }
         })
-
-        if (!this.valid.includes(false)) {
-            this._showScriptTree(false)
-        }
 
         return workspaceTreeItems
     }

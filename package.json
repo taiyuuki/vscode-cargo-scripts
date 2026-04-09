@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "%Description%",
   "main": "./dist/index.js",
   "l10n": "./l10n",

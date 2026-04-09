@@ -6,6 +6,8 @@ import { CargoScriptsCodeLensProvider } from './codeLens'
 import { escapeRegExp, pathExists } from './utils'
 
 export function activate(context: vscode.ExtensionContext) {
+    vscode.commands.executeCommand('setContext', 'showCargoScript', false)
+
     const workspaceFolders = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
         ? vscode.workspace.workspaceFolders[0].uri.fsPath
         : __dirname
