@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=taiyuuki.vscode-cargo-scripts">
-    <img alt="Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/taiyuuki.vscode-cargo-scripts?color=%23813c85&label=Marketplace&logo=visual%20studio%20code">
+    <img alt="Marketplace Version" src="https://img.shields.io/github/package-json/v/taiyuuki/vscode-cargo-scripts?label=Marketplace&color=%23813c85">
   </a>
   <a href="https://github.com/taiyuuki/vscode-cargo-scripts/blob/main/LICENSE.md">
     <img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg">
