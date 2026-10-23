@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://taiyuuki.gallerycdn.vsassets.io/extensions/taiyuuki/vscode-cargo-scripts/0.0.1/1680743890799/Microsoft.VisualStudio.Services.Icons.Default" width="150" />
+<img alt="Cargo Scripts" src="https://taiyuuki.gallerycdn.vsassets.io/extensions/taiyuuki/vscode-cargo-scripts/0.0.1/1680743890799/Microsoft.VisualStudio.Services.Icons.Default" width="150" />
 </p>
 
 <h1 align="center">Cargo Scripts for VS Code</h1>
@@ -17,13 +17,14 @@
 
 就像NPM`package.json`中的`scripts`一样。
 
-# ✨ 功能特性
+## ✨ 功能特性
 
 - 🚀 自动解析`.cargo/config.toml` 或 `Cargo.toml` 配置
 - ⚡ 一键运行脚本（侧边栏点击即可）
+- 🐛 通过 [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) 调试 cargo 脚本
 - 🔍 自动监听配置文件变化
 
-# 🛠 安装
+## 🛠 安装
 
 1. 打开VS Code扩展市场
 2. 搜索 `Cargo Scripts` 或者 `taiyuuki.vscode-cargo-scripts`
@@ -36,11 +37,11 @@
 code --install-extension taiyuuki.vscode-cargo-scripts
 ```
 
-# 🚦 使用
+## 🚦 使用
 
 你可以在`.cargo/config.toml`或`Cargo.toml`文件中定义脚本。
 
-## `.cargo/config.toml`（推荐）
+### `.cargo/config.toml`（推荐）
 
 参考[The Cargo Book](https://doc.rust-lang.org/cargo/reference/config.html#alias)了解更多关于`[alias]`部分的内容。
 
@@ -55,7 +56,7 @@ t = ["test", "--", "--nocapture"]
 
 然后你会在侧边栏看到CARGO SCRIPTS，注意所有脚本后面都有一个运行图标，你可以通过点击图标运行脚本。
 
-## `Cargo.toml`
+### `Cargo.toml`
 
 注意，脚本的值应该是完整的命令行字符串，不能省略前缀`cargo`。
 
@@ -69,7 +70,19 @@ test = "cargo test -- --nocapture"
 
 # 或者，如果你在工作区中
 [workspace.metadata.scripts]
-run = "cargo run"
-build = "cargo build --release"
-test = "cargo test -- --nocapture"
+run = "cargo run"
+build = "cargo build --release"
+test = "cargo test -- --nocapture"
 ```
+
+## 🐛 调试
+
+点击侧边栏脚本旁的调试图标（或脚本定义上方的 `Debug` CodeLens）即可启动调试会话。
+
+要求：
+
+1. 脚本必须是会启动目标的 `cargo` 命令（`run`、`test`、`bench` 等）；非 cargo 命令以及 `check`、`clippy`、`watch` 这类子命令不支持调试。
+2. 需要安装 [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) 扩展，未安装时调试按钮不会显示。
+
+`test`/`bench` 脚本会先以 `--no-run` 构建目标，再直接启动选定的测试二进制；若存在多个测试目标，会弹出选择框让你挑选要调试的目标。
+

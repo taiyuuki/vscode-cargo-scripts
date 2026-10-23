@@ -1,5 +1,5 @@
 import * as fs from 'node:fs'
-import { join } from 'node:path'
+import { basename, dirname, join } from 'node:path'
 import * as vscode from 'vscode'
 import { parse } from '@iarna/toml'
 import fg from 'fast-glob'
@@ -10,14 +10,20 @@ import { objEntries, pathExists, replaceRootPath } from './utils'
 export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem | WorkspaceTreeItem> {
     private readonly _onChangeTreeData = new vscode.EventEmitter<ScriptTreeItem | undefined>()
     public readonly onDidChangeTreeData = this._onChangeTreeData.event
-    private folders: string[] = []
+    private readonly watcher: vscode.FileSystemWatcher
+    private folders:          string[] = []
 
     constructor(private readonly workspaceRoot: string) {
         this._init()
-        const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '{**/Cargo.toml,**/.cargo/config.toml,**/.cargo/config}'))
-        watcher.onDidChange(this.emitDataChange.bind(this))
-        watcher.onDidCreate(this.emitDataChange.bind(this))
-        watcher.onDidDelete(this.emitDataChange.bind(this))
+        this.watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(this.workspaceRoot, '{**/Cargo.toml,**/.cargo/config.toml,**/.cargo/config}'))
+        this.watcher.onDidChange(this.emitDataChange.bind(this))
+        this.watcher.onDidCreate(this.emitDataChange.bind(this))
+        this.watcher.onDidDelete(this.emitDataChange.bind(this))
+    }
+
+    dispose() {
+        this.watcher.dispose()
+        this._onChangeTreeData.dispose()
     }
 
     private async _init() {
@@ -81,10 +87,20 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
         const workspaceTreeItems: WorkspaceTreeItem[] = []
         this.folders.forEach(folder => {
             if (pathExists(folder)) {
-                const text = fs.readFileSync(folder, 'utf-8')
-                const toml = parse(text) as Record<string, any>
-                const alias = toml?.alias
-                if(alias) {
+                let toml: Record<string, any>
+                try {
+                    toml = parse(fs.readFileSync(folder, 'utf-8')) as Record<string, any>
+                }
+                catch {
+
+                    // Skip invalid or half-edited TOML files instead of breaking the tree.
+                    return
+                }
+
+                // [alias] only makes sense in .cargo/config.toml / .cargo/config
+                const isCargoConfig = basename(dirname(folder)) === '.cargo'
+                const alias = isCargoConfig ? toml?.alias : undefined
+                if (alias) {
                     const scripts: ScriptItem = {}
                     objEntries(alias).reduce((acc, [key, value]) => {
                         const expandedValue = Array.isArray(value) ? value.join(' ') : value
@@ -101,7 +117,8 @@ export class CargoScriptsTree implements vscode.TreeDataProvider<ScriptTreeItem 
                     workspaceTreeItems.push(new WorkspaceTreeItem(replaceRootPath(folder, this.workspaceRoot), scripts))
                 }
                 
-                const scripts = toml?.workspace?.metadata?.scripts || toml?.package?.metadata?.scripts
+                // metadata.scripts only makes sense in Cargo.toml
+                const scripts = isCargoConfig ? undefined : toml?.workspace?.metadata?.scripts || toml?.package?.metadata?.scripts
                 if (scripts) {
                     const workspaceScripts: ScriptItem = {}
                     

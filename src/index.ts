@@ -1,12 +1,44 @@
-import { resolve } from 'node:path'
 import * as vscode from 'vscode'
-import { debugCommand, executeCommand } from './terminal'
+import { debugCommand, isCodeLLDBInstalled } from './debug'
+import { executeCommand } from './terminal'
 import { CargoScriptsTree } from './scriptsTree'
 import { CargoScriptsCodeLensProvider } from './codeLens'
 import { escapeRegExp, pathExists } from './utils'
 
+/**
+ * Locate the `name = "description"` entry in a TOML document.
+ * All interpolated content is escaped to prevent RegExp injection,
+ * and failures fall back to opening the document without a selection.
+ */
+function findScriptRange(doc: vscode.TextDocument, name: string, description: string): vscode.Range | undefined {
+    const nameRe = escapeRegExp(name)
+    const valueRe = escapeRegExp(description)
+        .replace(/"/g, '["\']')
+        .replace(/\s+/g, '\\s+')
+
+    try {
+        const match = new RegExp(`^[ \\t]*${nameRe}[ \\t]*=[ \\t]*["']?${valueRe}["']?`, 'im').exec(doc.getText())
+        if (match) {
+            return new vscode.Range(doc.positionAt(match.index), doc.positionAt(match.index + match[0].length))
+        }
+    }
+    catch {
+
+        // Malformed pattern or unexpected input: fall back to no selection.
+    }
+
+    return undefined
+}
+
 export function activate(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand('setContext', 'showCargoScript', false)
+
+    // Debug actions (CodeLens + tree icons) are only offered when CodeLLDB is installed.
+    const updateDebugAvailable = () => {
+        vscode.commands.executeCommand('setContext', 'cargoScripts.debugAvailable', isCodeLLDBInstalled())
+    }
+    updateDebugAvailable()
+    const extensionsDispose = vscode.extensions.onDidChange(updateDebugAvailable)
 
     const workspaceFolders = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
         ? vscode.workspace.workspaceFolders[0].uri.fsPath
@@ -15,54 +47,43 @@ export function activate(context: vscode.ExtensionContext) {
     const scriptsTree = new CargoScriptsTree(workspaceFolders)
     const treeData = vscode.window.registerTreeDataProvider('cargoScripts', scriptsTree)
     const runDispose = vscode.commands.registerCommand('cargoScripts.run', item => {
-        if (pathExists(item.cwd)) {
-            if (item.cwd.match(/.*?\.cargo$/)) {
-                executeCommand(item.label, item.cmd, resolve(item.cwd, '..'))
-            }
-            else {
-                executeCommand(item.label, item.cmd, item.cwd)
-            }
+        if (!item?.cwd) {
+            return
         }
-        else {
+        if (!pathExists(item.cwd)) {
             scriptsTree.emitDataChange.call(scriptsTree)
+
+            return
         }
+        executeCommand(item.label, item.cmd, item.cwd)
     })
     const debugDispose = vscode.commands.registerCommand('cargoScripts.debug', item => {
-        if (pathExists(item.cwd)) {
-            if (item.cwd.match(/.*?\.cargo$/)) {
-                debugCommand(item.label, item.cmd, resolve(item.cwd, '..'))
-            }
-            else {
-                debugCommand(item.label, item.cmd, item.cwd)
-            }
+        if (!item?.cwd) {
+            return
         }
-        else {
+        if (!pathExists(item.cwd)) {
             scriptsTree.emitDataChange.call(scriptsTree)
+
+            return
         }
+        debugCommand(item.label, item.cmd, item.cwd)
     })
     const openDispose = vscode.commands.registerCommand('cargoScripts.open', (name, cwd, description) => {
-        if (pathExists(cwd)) {
-            vscode.workspace.openTextDocument(vscode.Uri.file(cwd)).then(doc => {
-                const reg1 = new RegExp(`${name}\\s*=\\s*["']${description}["']`, 'i')
-                const reg2Str = escapeRegExp(description)
-                    .replace(/"/g, '["\']')
-                    .replace(/\s*/, '\\s*')
-                const reg2 = new RegExp(`${name}\\s*=\\s*${reg2Str}`, 'i')
-                const text = doc.getText()
-                const match = reg1.exec(text) || reg2.exec(text)
-                
-                if (match) {
-                    const pst = match.index
-                    vscode.window.showTextDocument(doc, { selection: new vscode.Range(doc.positionAt(pst), doc.positionAt(pst + match[0].length)) })
-                }
-                else {
-                    vscode.window.showTextDocument(doc)
-                }
-            })
-        }
-        else {
+        if (typeof name !== 'string' || typeof cwd !== 'string' || !pathExists(cwd)) {
             scriptsTree.emitDataChange.call(scriptsTree)
+
+            return
         }
+        vscode.workspace.openTextDocument(vscode.Uri.file(cwd)).then(doc => {
+            const range = findScriptRange(doc, name, typeof description === 'string' ? description : '')
+
+            if (range) {
+                vscode.window.showTextDocument(doc, { selection: range })
+            }
+            else {
+                vscode.window.showTextDocument(doc)
+            }
+        })
     })
     const refreshDispose = vscode.commands.registerCommand('cargoScripts.refresh', scriptsTree.emitDataChange.bind(scriptsTree))
     const completionDispose = vscode.languages.registerCompletionItemProvider([{ language: 'toml', pattern: '**/Cargo.toml' }], {
@@ -73,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
             const detail = 'Cargo Scripts'
             const packageScripts = 'package.metadata.scripts'
             const workspaceScripts = 'workspace.metadata.scripts'
-            if (!linePrefix.startsWith('[') && !linePrefix.startsWith('[')) {
+            if (!linePrefix.startsWith('[')) {
                 return void 0
             }
 
@@ -128,10 +149,7 @@ build = "cargo build"
         { language: 'toml', pattern: '**/.cargo/config' },
     ], codeLensProvider)
 
-    context.subscriptions.push(treeData, runDispose, debugDispose, openDispose, refreshDispose, completionDispose, codeLensDispose)
+    context.subscriptions.push(treeData, scriptsTree, extensionsDispose, runDispose, debugDispose, openDispose, refreshDispose, completionDispose, codeLensDispose)
 }
 
-export function deactivate(context: vscode.ExtensionContext) {
-    context.subscriptions.forEach(d => d.dispose())
-    vscode.commands.executeCommand('setContext', 'showCargoScript', false)
-}
+export function deactivate() {}

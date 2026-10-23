@@ -5,6 +5,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    "skipLibCheck": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,

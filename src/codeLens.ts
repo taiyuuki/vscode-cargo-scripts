@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { parse } from '@iarna/toml'
+import { isCodeLLDBInstalled } from './debug'
 
 interface ScriptInfo {
     key:   string
@@ -15,8 +16,16 @@ export class CargoScriptsCodeLensProvider implements vscode.CodeLensProvider {
 
     constructor() {
 
-        // Refresh code lenses when configuration changes
-        vscode.workspace.onDidChangeConfiguration(() => {
+        // Refresh code lenses when relevant configuration changes
+        vscode.workspace.onDidChangeConfiguration(e => {
+            if (e.affectsConfiguration('cargoScripts')) {
+                this._onDidChangeCodeLenses.fire()
+            }
+        })
+
+        // Refresh when CodeLLDB is installed/uninstalled at runtime,
+        // so Debug lenses appear/disappear accordingly.
+        vscode.extensions.onDidChange(() => {
             this._onDidChangeCodeLenses.fire()
         })
     }
@@ -52,18 +61,20 @@ export class CargoScriptsCodeLensProvider implements vscode.CodeLensProvider {
             })
             codeLenses.push(runLens)
 
-            // Debug CodeLens
-            const debugLens = new vscode.CodeLens(range, {
-                title:     `$(debug-alt) ${vscode.l10n.t('Debug')}`,
-                command:   'cargoScripts.debug',
-                tooltip:   `${vscode.l10n.t('Debug')}: ${script.key}`,
-                arguments: [{
-                    label: script.key,
-                    cmd:   script.cmd,
-                    cwd:   script.cwd,
-                }],
-            })
-            codeLenses.push(debugLens)
+            // Debug CodeLens (only shown when CodeLLDB is installed)
+            if (isCodeLLDBInstalled()) {
+                const debugLens = new vscode.CodeLens(range, {
+                    title:     `$(debug-alt) ${vscode.l10n.t('Debug')}`,
+                    command:   'cargoScripts.debug',
+                    tooltip:   `${vscode.l10n.t('Debug')}: ${script.key}`,
+                    arguments: [{
+                        label: script.key,
+                        cmd:   script.cmd,
+                        cwd:   script.cwd,
+                    }],
+                })
+                codeLenses.push(debugLens)
+            }
         }
 
         return codeLenses

@@ -2,7 +2,7 @@
   "name": "vscode-cargo-scripts",
   "displayName": "Cargo Scripts",
   "publisher": "taiyuuki",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "%Description%",
   "main": "./dist/index.js",
   "l10n": "./l10n",
@@ -15,6 +15,7 @@
   "engines": {
     "vscode": "^1.74.0"
   },
+  "packageManager": "pnpm@12.14.0",
   "categories": [
     "Other"
   ],
@@ -71,7 +72,7 @@
         {
           "command": "cargoScripts.debug",
           "group": "inline",
-          "when": "viewItem == script_item",
+          "when": "viewItem == script_item && cargoScripts.debugAvailable",
           "icon": "$(debug-alt)"
         }
       ]
@@ -94,9 +95,9 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "bump:patch": "bump patch",
-    "package": "npx vsce package --no-dependencies",
-    "publish": "npx vsce publish",
-    "test": "vitest"
+    "package": "vsce package --no-dependencies",
+    "publish": "vsce publish",
+    "test": "vitest run"
   },
   "keywords": [
     "rust",
@@ -106,23 +107,18 @@
   "author": "taiyuuki <taiyuuki@qq.com>",
   "license": "MIT",
   "devDependencies": {
-    "@taiyuuki/eslint-config": "^1.6.1",
-    "@types/node": "^18.19.97",
-    "@types/vscode": "^1.74.0",
-    "@vscode/test-electron": "^2.5.2",
-    "@vscode/vsce": "^3.3.2",
-    "eslint": "^9.39.4",
-    "tsup": "^8.4.0"
+    "@taiyuuki/eslint-config": "^1.6.9",
+    "@types/node": "^26.6.5",
+    "@types/vscode": "1.74.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.0.0",
+    "eslint": "^10.13.0",
+    "tsup": "^9.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "@iarna/toml": "^3.0.0",
     "fast-glob": "^3.3.3"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "eslint": "9"
-      }
-    }
   }
 }
